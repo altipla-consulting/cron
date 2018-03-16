@@ -23,6 +23,11 @@ func Schedule(schedule string, fn Fn) {
 		"schedule": schedule,
 	})
 
+	if IsLocal() {
+		logger.Info("Cron configured")
+		return
+	}
+
 	expr := cronexpr.MustParse(schedule)
 
 	go func() {
