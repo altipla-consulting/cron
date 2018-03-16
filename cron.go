@@ -25,10 +25,9 @@ func run(fn Fn, schedule string, next Nexter) {
 		"schedule": schedule,
 	})
 
-	logger.Info("Schedule cron")
 	go func() {
 		n := time.Now()
-		logger.WithFields(log.Fields{"time": next(n)}).Info("Waiting next run")
+		logger.WithFields(log.Fields{"next-run": next(n)}).Info("Schedule cron")
 		time.Sleep(next(n).Sub(n))
 
 		if err := fn(context.Background()); err != nil {
