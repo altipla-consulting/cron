@@ -2,6 +2,7 @@ package cron
 
 import (
 	"net/http"
+	"path/filepath"
 	"reflect"
 	"runtime"
 	"time"
@@ -27,7 +28,8 @@ func Daily(fn Fn) {
 }
 
 func Schedule(schedule string, fn Fn) {
-	name := runtime.FuncForPC(reflect.ValueOf(fn).Pointer()).Name()
+	name := filepath.Base(runtime.FuncForPC(reflect.ValueOf(fn).Pointer()).Name())
+
 	logger := log.WithFields(log.Fields{
 		"name":     name,
 		"schedule": schedule,
