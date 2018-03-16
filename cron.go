@@ -13,7 +13,7 @@ import (
 	"golang.org/x/net/context"
 )
 
-var funcs map[string]Fn
+var funcs = map[string]Fn{}
 
 func Handler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	job := ps.ByName("job")
