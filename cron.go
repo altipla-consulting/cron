@@ -28,6 +28,7 @@ func NewRunner(opts ...Option) *Runner {
 	runner := &Runner{
 		funcs: map[string]Fn{},
 	}
+
 	for _, opt := range opts {
 		opt(runner)
 	}
