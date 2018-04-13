@@ -10,7 +10,8 @@ import (
 )
 
 func main() {
-	cron.Daily(Sync)
+	runner := cron.NewRunner()
+	runner.Daily(Sync)
 	time.Sleep(10 * time.Second)
 }
 
