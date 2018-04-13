@@ -34,7 +34,7 @@ func NewRunner(opts ...Option) *Runner {
 }
 
 func (runner *Runner) Handler() func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	return func() {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		job := ps.ByName("job")
 		runner.funcs[job](r.Context())
 	}
