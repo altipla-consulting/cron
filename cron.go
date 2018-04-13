@@ -25,7 +25,9 @@ type Runner struct {
 type Option func(runner *Runner)
 
 func NewRunner(opts ...Option) *Runner {
-	runner := new(Runner)
+	runner := &Runner{
+		funcs: map[string]Fn{},
+	}
 	for _, opt := range opts {
 		opt(runner)
 	}
