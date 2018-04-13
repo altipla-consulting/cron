@@ -1,7 +1,7 @@
 package cron
 
-func AddSentry(in string) Option {
+func WithSentry(dsn string) Option {
 	return func(runner *Runner) {
-		runner.dsn = in
+		runner.dsn = dsn
 	}
 }

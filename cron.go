@@ -33,9 +33,11 @@ func NewRunner(opts ...Option) *Runner {
 	return runner
 }
 
-func (runner *Runner) Handler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	job := ps.ByName("job")
-	runner.funcs[job](r.Context())
+func (runner *Runner) Handler() func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	return func() {
+		job := ps.ByName("job")
+		runner.funcs[job](r.Context())
+	}
 }
 
 func (runner *Runner) Daily(fn Fn) {
@@ -66,6 +68,7 @@ func (runner *Runner) Schedule(schedule string, fn Fn) {
 		next := expr.Next(time.Now())
 		logger.WithFields(log.Fields{"next-run": next}).Info("Schedule cron")
 		time.Sleep(next.Sub(time.Now()))
+
 		ctx := context.Background()
 		if client != nil {
 			ctx = sentry.WithContext(ctx)
