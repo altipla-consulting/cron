@@ -54,6 +54,8 @@ func (runner *Runner) Schedule(schedule string, fn Fn) {
 		"schedule": schedule,
 	})
 
+	logger.Info("Configuring cron")
+
 	if IsLocal() {
 		logger.Info("Cron configured")
 		runner.funcs[name] = fn
