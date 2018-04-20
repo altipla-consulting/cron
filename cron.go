@@ -69,7 +69,7 @@ func (runner *Runner) Schedule(schedule string, fn Fn) {
 
 	go func() {
 		next := expr.Next(time.Now())
-		logger.WithFields(log.Fields{"next-run": next}).Info("Schedule cron")
+		logger.WithField("next-run", next).Info("Schedule cron")
 		time.Sleep(next.Sub(time.Now()))
 
 		ctx := context.Background()
