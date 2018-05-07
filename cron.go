@@ -70,19 +70,21 @@ func (runner *Runner) Schedule(schedule string, fn Fn) {
 	expr := cronexpr.MustParse(schedule)
 
 	go func() {
-		next := expr.Next(time.Now())
-		logger.WithField("next-run", next).Info("Schedule cron")
-		time.Sleep(next.Sub(time.Now()))
+		for {
+			next := expr.Next(time.Now())
+			logger.WithField("next-run", next).Info("Schedule cron")
+			time.Sleep(next.Sub(time.Now()))
 
-		ctx := context.Background()
-		if client != nil {
-			ctx = sentry.WithContext(ctx)
-		}
-
-		if err := fn(ctx); err != nil {
-			logger.WithFields(log.Fields{"err": err.Error(), "stack": errors.ErrorStack(err)}).Error("Failed to run cron")
+			ctx := context.Background()
 			if client != nil {
-				client.ReportInternal(ctx, err)
+				ctx = sentry.WithContext(ctx)
+			}
+
+			if err := fn(ctx); err != nil {
+				logger.WithFields(log.Fields{"err": err.Error(), "stack": errors.ErrorStack(err)}).Error("Failed to run cron")
+				if client != nil {
+					client.ReportInternal(ctx, err)
+				}
 			}
 		}
 	}()
