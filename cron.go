@@ -47,6 +47,10 @@ func (runner *Runner) Daily(fn Fn) {
 	runner.Schedule("0 0 1 * * * *", fn)
 }
 
+func (runner *Runner) Hourly(fn Fn) {
+	runner.Schedule("0 0 * * * * *", fn)
+}
+
 func (runner *Runner) Schedule(schedule string, fn Fn) {
 	name := filepath.Base(runtime.FuncForPC(reflect.ValueOf(fn).Pointer()).Name())
 	logger := log.WithFields(log.Fields{
